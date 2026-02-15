@@ -8,6 +8,7 @@ from app.services.vector_service import search_chunks
 from app.core.dependencies import get_current_user
 from app.models.user import User
 from app.models.file import File as FileModel
+from app.services.chat_service import get_recent_message, save_message
 
 router = APIRouter(prefix="/ai", tags=["AI"])
 
@@ -34,18 +35,29 @@ def ask_doc(data: Question,db:Session = Depends(get_db),current_user: User = Dep
 
     context = "\n\n".join(chunks)
 
-    prompt = f"""
-You are a document assistant.
-Answer ONLY from the provided context.
-If answer not present, say: "Answer not found in document".
+    history=get_recent_message(db,data.file_id,current_user.id)
 
-CONTEXT:
+    conversation=''
+    for msg in history:
+        conversation+=f"{msg.role.upper()}:\n{msg.content}\n\n"
+
+    prompt = f"""
+You are a helpful document assistant.
+
+Conversation so far:
+{conversation}
+
+Use ONLY the following document context to answer.
+
+DOCUMENT CONTEXT:
 {context}
 
-QUESTION:
+USER QUESTION:
 {data.question}
 """
 
     answer = ask_gemini(prompt)
+    save_message(db,file.id,current_user.id,'user',data.question)
+    save_message(db,file.id,current_user.id,'assistant',answer)
 
     return {"answer": answer}
