@@ -10,6 +10,8 @@ from app.models.file import File as FileModel
 from app.services.pdf_service import extract_text_from_pdf
 from app.services.chunk_service import chunk_text
 from app.services.vector_service import add_chunks
+from app.core.dependencies import get_current_user
+from app.models.user import User
 
 router = APIRouter(prefix="/upload", tags=["Upload"])
 
@@ -18,7 +20,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 @router.post("/")
-def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
+def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db),current_user: User = Depends(get_current_user)):
     # 1️⃣ Validate file
     if not file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are allowed")
@@ -34,7 +36,7 @@ def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
             shutil.copyfileobj(file.file, buffer)
 
         # 4️⃣ Save metadata to DB
-        new_file = FileModel(filename=filename, filepath=file_path)
+        new_file = FileModel(filename=filename, filepath=file_path, user_id=current_user.id)
         db.add(new_file)
         db.commit()
         db.refresh(new_file)
@@ -59,4 +61,3 @@ def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-        
