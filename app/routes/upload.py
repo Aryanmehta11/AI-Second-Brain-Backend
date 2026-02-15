@@ -1,51 +1,62 @@
-from fastapi import APIRouter,UploadFile,File,Depends
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.db.database import get_db
-from app.models.file import File as FileModel
 import os
 import shutil
-from app.routes.ai import Question
-from app.services.chunk_service import chunk_service
-from app.services.vector_service  import search_chunks
-from app.services.pdf_service import extract_text
-from app.services.ai_service import ask_gemini
+import uuid
 
-router=APIRouter(prefix='/upload',tags=["upload"])
-UPLOAD_DIR="uploads"
-os.makedirs(UPLOAD_DIR,exist_ok=True)
+from app.db.database import get_db
+from app.models.file import File as FileModel
+
+from app.services.pdf_service import extract_text_from_pdf
+from app.services.chunk_service import chunk_text
+from app.services.vector_service import add_chunks
+
+router = APIRouter(prefix="/upload", tags=["Upload"])
+
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
 
 @router.post("/")
-def upload_file(file:UploadFile=File(...),db:Session=Depends(get_db)):
-    path=f"{UPLOAD_DIR}/{file.filename}"
+def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    # 1️⃣ Validate file
+    if not file.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
 
-    with open(path,"wb") as buffer:
-        shutil.copyfileobj(file.file,buffer)
+    try:
+        # 2️⃣ Generate unique filename
+        unique_id = str(uuid.uuid4())
+        filename = f"{unique_id}_{file.filename}"
+        file_path = os.path.join(UPLOAD_DIR, filename)
 
-    new_file=FileModel(filename=file.filename,filepath=path)
-    db.add(new_file)
-    db.commit()
+        # 3️⃣ Save file locally
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
 
-    text=extract_text(path)
-    summary = ask_gemini(f"Summarize this:\n{text[:4000]}")
-    return {"summary": summary}
+        # 4️⃣ Save metadata to DB
+        new_file = FileModel(filename=filename, filepath=file_path)
+        db.add(new_file)
+        db.commit()
+        db.refresh(new_file)
 
-      
+        # 5️⃣ Extract text from PDF
+        text = extract_text_from_pdf(file_path)
 
+        if not text.strip():
+            raise HTTPException(status_code=400, detail="PDF has no readable text")
 
-@router.post("/ask-doc")
-def ask_doc(data: Question):
-    chunks = search_chunks(data.question)
+        # 6️⃣ Chunk text
+        chunks = chunk_text(text)
 
-    context = "\n".join(chunks)
+        # 7️⃣ Store embeddings in vector DB
+        add_chunks(chunks, new_file.id)
 
-    prompt = f"""
-    Answer using ONLY this context:
+        return {
+            "message": "File uploaded and processed successfully",
+            "file_id": new_file.id,
+            "chunks_created": len(chunks)
+        }
 
-    {context}
-
-    Question: {data.question}
-    """
-
-    answer = chunk_service(prompt)
-
-    return {"answer": answer}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+        
