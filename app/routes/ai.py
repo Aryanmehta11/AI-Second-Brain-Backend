@@ -9,6 +9,11 @@ from app.core.dependencies import get_current_user
 from app.models.user import User
 from app.models.file import File as FileModel
 from app.services.chat_service import get_recent_message, save_message
+from app.models.message import Message
+from sqlalchemy.orm import Session
+from fastapi import Depends
+from app.db.database import get_db
+
 
 router = APIRouter(prefix="/ai", tags=["AI"])
 
@@ -61,3 +66,17 @@ USER QUESTION:
     save_message(db,file.id,current_user.id,'assistant',answer)
 
     return {"answer": answer}
+
+
+
+@router.get("/history/{file_id}")
+def get_history(file_id:int,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
+    file=db.query(FileModel).filter(FileModel.id==file_id).first()
+    if not file:
+        raise HTTPException(status_code=403,detail="File not found")
+    if file.user_id != current_user.id:
+        raise HTTPException(status_code=403,detail="Access denied")
+    messages=db.query(Message).filter(Message.file_id==file_id,Message.user_id==current_user.id).order_by(Message.id.desc()).all()[::-1]
+    return [
+        {"role":m.role,"content":m.content} for m in messages
+    ]

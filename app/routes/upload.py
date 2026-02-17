@@ -36,7 +36,7 @@ def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db),curr
             shutil.copyfileobj(file.file, buffer)
 
         # 4️⃣ Save metadata to DB
-        new_file = FileModel(filename=filename, filepath=file_path, user_id=current_user.id)
+        new_file = FileModel(filename=filename, original_name=file.filename, user_id=current_user.id)
         db.add(new_file)
         db.commit()
         db.refresh(new_file)
@@ -61,3 +61,10 @@ def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db),curr
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@router.get("/files")
+def list_files(db:Session=Depends(get_db),current_user: User = Depends(get_current_user)):
+    files=db.query(FileModel).filter(FileModel.user_id==current_user.id).all()
+    return [{"id": f.id, "filename": f.original_name} for f in files]

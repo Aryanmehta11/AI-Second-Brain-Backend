@@ -4,5 +4,5 @@ class File(Base):
     __tablename__="files"
     id = Column(Integer, primary_key=True)
     filename = Column(String)
-    filepath = Column(String)
+    original_name = Column(String)
     user_id = Column(Integer, ForeignKey("users.id"))
