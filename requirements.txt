@@ -12,3 +12,4 @@ python-multipart
 pydantic
 pydantic[email]
 email-validator
+bcrypt==4.0.1
