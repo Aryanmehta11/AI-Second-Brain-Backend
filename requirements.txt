@@ -5,7 +5,7 @@ psycopg2-binary
 pgvector
 python-dotenv
 google-genai
-PyMuPDF
+pypdf
 python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
