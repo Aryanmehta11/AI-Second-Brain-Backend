@@ -54,7 +54,8 @@ def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db),curr
         chunks = chunk_text(text)
 
         # 7️⃣ Store embeddings in vector DB
-        add_chunks(chunks, new_file.id)
+        add_chunks(db, chunks, new_file.id)
+
 
         return {
             "message": "File uploaded and processed successfully",
@@ -96,7 +97,7 @@ def delete_file(
         os.remove(file_path)
 
     # 4️⃣ Delete vector embeddings
-    delete_chunks(file_id)
+    delete_chunks(db,file_id)
 
     # 5️⃣ Delete chat history
     db.query(Message).filter(Message.file_id == file_id).delete()
