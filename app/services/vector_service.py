@@ -46,3 +46,35 @@ def search_chunks(query: str, file_id: int, k: int = 4):
         return []
 
     return results["documents"][0]
+def delete_chunks(file_id: int):
+    data = collection.get()
+
+    if not data or "ids" not in data:
+        return
+
+    to_delete = [i for i in data["ids"] if i.startswith(f"{file_id}_")]
+
+    if to_delete:
+        collection.delete(ids=to_delete)
+
+def search_all_documents(query: str, user_file_ids: list[int], k=6):
+    user_file_ids = [str(fid) for fid in user_file_ids]
+
+    results = collection.query(
+        query_texts=[query],
+        n_results=k,
+        where={"file_id": {"$in": user_file_ids}}
+    )
+
+    documents = results["documents"][0]
+    metadatas = results["metadatas"][0]
+
+    combined = []
+    for doc, meta in zip(documents, metadatas):
+        combined.append({
+            "text": doc,
+            "file_id": int(meta["file_id"])
+        })
+
+    return combined
+

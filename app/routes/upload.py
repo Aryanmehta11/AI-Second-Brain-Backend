@@ -5,12 +5,15 @@ import shutil
 import uuid
 
 from app.db.database import get_db
+from app.models import file
 from app.models.file import File as FileModel
 
 from app.services.pdf_service import extract_text_from_pdf
 from app.services.chunk_service import chunk_text
 from app.services.vector_service import add_chunks
 from app.core.dependencies import get_current_user
+from app.models.message import Message
+from app.services.vector_service import delete_chunks
 from app.models.user import User
 
 router = APIRouter(prefix="/upload", tags=["Upload"])
@@ -68,3 +71,38 @@ def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db),curr
 def list_files(db:Session=Depends(get_db),current_user: User = Depends(get_current_user)):
     files=db.query(FileModel).filter(FileModel.user_id==current_user.id).all()
     return [{"id": f.id, "filename": f.original_name} for f in files]
+
+
+@router.delete("/{file_id}")
+def delete_file(
+    file_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # 1️⃣ Find file
+    file = db.query(FileModel).filter(FileModel.id == file_id).first()
+
+    if not file:
+        raise HTTPException(status_code=404, detail="File not found")
+
+    # 2️⃣ Ownership check
+    if file.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not allowed")
+
+    # 3️⃣ Delete physical file
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
+    # 4️⃣ Delete vector embeddings
+    delete_chunks(file_id)
+
+    # 5️⃣ Delete chat history
+    db.query(Message).filter(Message.file_id == file_id).delete()
+
+    # 6️⃣ Delete DB record
+    db.delete(file)
+    db.commit()
+
+    return {"message": "File deleted successfully"}

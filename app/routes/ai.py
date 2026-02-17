@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from app.db.database import get_db
 from app.services.ai_service import ask_gemini
-from app.services.vector_service import search_chunks
+from app.services.vector_service import search_all_documents, search_chunks
 from app.core.dependencies import get_current_user
 from app.models.user import User
 from app.models.file import File as FileModel
@@ -80,3 +80,50 @@ def get_history(file_id:int,db:Session=Depends(get_db),current_user:User=Depends
     return [
         {"role":m.role,"content":m.content} for m in messages
     ]
+
+@router.post("/ask-all")
+def ask_all(data: Question, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+
+    # 1️⃣ Get all user files
+    files = db.query(FileModel).filter(FileModel.user_id == current_user.id).all()
+    file_ids = [f.id for f in files]
+
+    if not file_ids:
+        raise HTTPException(status_code=400, detail="No documents uploaded")
+
+    # 2️⃣ Search across all documents
+    results = search_all_documents(data.question, file_ids)
+
+    if not results:
+        raise HTTPException(status_code=404, detail="No relevant content found")
+
+    # 3️⃣ Build context grouped by file
+    context = ""
+    sources = set()
+
+    for r in results:
+        file = next(f for f in files if f.id == r["file_id"])
+        context += f"\n[{file.original_name}]\n{r['text']}\n"
+        sources.add(file.original_name)
+
+    # 4️⃣ Prompt
+    prompt = f"""
+You are a document research assistant.
+
+Answer using ONLY the provided context.
+Format your answer using markdown bullet points when useful.
+Do not write the word SOURCES in the answer.
+
+CONTEXT:
+{context}
+
+QUESTION:
+{data.question}
+"""
+
+    answer = ask_gemini(prompt)
+
+    return {
+        "answer": answer,
+        "sources": list(sources)
+    }

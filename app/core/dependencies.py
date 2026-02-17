@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.models.user import User
 from app.core.security import SECRET_KEY,ALGORITHM
-security=HTTPBearer()
+security=HTTPBearer(auto_error=True)
 
 def get_current_user(
         credentials:HTTPAuthorizationCredentials=Depends(security),
