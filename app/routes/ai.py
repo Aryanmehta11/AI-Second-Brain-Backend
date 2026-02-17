@@ -33,7 +33,8 @@ def ask_doc(data: Question,db:Session = Depends(get_db),current_user: User = Dep
     if file.user_id != current_user.id:
         raise HTTPException(status_code=403,detail="Access denied")
 
-    chunks = search_chunks(data.question, data.file_id)
+    chunks = search_chunks(db, data.question, data.file_id)
+
 
     if not chunks:
         raise HTTPException(status_code=404, detail="No relevant content found in this document")
@@ -92,7 +93,8 @@ def ask_all(data: Question, db: Session = Depends(get_db), current_user: User = 
         raise HTTPException(status_code=400, detail="No documents uploaded")
 
     # 2️⃣ Search across all documents
-    results = search_all_documents(data.question, file_ids)
+    results = search_all_documents(db, data.question, file_ids)
+
 
     if not results:
         raise HTTPException(status_code=404, detail="No relevant content found")

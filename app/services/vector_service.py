@@ -1,80 +1,69 @@
-import chromadb
-import os
-print("Current working directory:", os.getcwd())
-from chromadb.utils import embedding_functions
+from sqlalchemy.orm import Session
+from sqlalchemy import text
+from app.services.embedding_service import embed_texts
 
 
-client = chromadb.PersistentClient(path="./chroma_db")
+# ---------------- ADD CHUNKS ----------------
+def add_chunks(db: Session, chunks: list[str], file_id: int):
+    embeddings = embed_texts(chunks)
 
-embedding_function = embedding_functions.DefaultEmbeddingFunction()
+    for i, (chunk, emb) in enumerate(zip(chunks, embeddings)):
+        db.execute(
+            text("""
+                INSERT INTO document_chunks (id, file_id, content, embedding)
+                VALUES (:id, :file_id, :content, CAST(:embedding AS vector))
+            """),
+            {
+                "id": f"{file_id}_{i}",
+                "file_id": file_id,
+                "content": chunk,
+                "embedding": str(emb)
+            }
+        )
 
-collection = client.get_or_create_collection(
-    name="documents",
-    embedding_function=embedding_function
-)
+    db.commit()
 
 
-# ---------------- ADD DOCUMENT CHUNKS ----------------
-def add_chunks(chunks: list[str], file_id: int):
-    ids = []
-    metadatas = []
-    file_id=str(file_id)  # 🔥 critical: convert to string
+# ---------------- SEARCH SINGLE DOC ----------------
+def search_chunks(db: Session, query: str, file_id: int, k: int = 4):
+    query_embedding = embed_texts([query])[0]
 
-    for i, chunk in enumerate(chunks):
-        ids.append(f"{file_id}_{i}")
-        metadatas.append({"file_id": file_id})
-
-    collection.add(
-        documents=chunks,
-        ids=ids,
-        metadatas=metadatas
+    result = db.execute(
+        text("""
+            SELECT content
+            FROM document_chunks
+            WHERE file_id = :file_id
+            ORDER BY embedding <=> CAST(:embedding AS vector)
+            LIMIT :k
+        """),
+        {"file_id": file_id, "embedding": str(query_embedding), "k": k}
     )
 
-    
+    return [row[0] for row in result.fetchall()]
 
 
-# ---------------- SEARCH DOCUMENT ----------------
-def search_chunks(query: str, file_id: int, k: int = 4):
-    file_id = str(file_id) 
-    results = collection.query(
-        query_texts=[query],
-        n_results=k,
-        where={"file_id": file_id}  # 🔥 critical
+# ---------------- SEARCH ALL DOCS ----------------
+def search_all_documents(db: Session, query: str, file_ids: list[int], k: int = 6):
+    query_embedding = embed_texts([query])[0]
+
+    result = db.execute(
+        text("""
+            SELECT content, file_id
+            FROM document_chunks
+            WHERE file_id = ANY(:file_ids)
+            ORDER BY embedding <=> CAST(:embedding AS vector)
+            LIMIT :k
+        """),
+        {"file_ids": file_ids, "embedding": str(query_embedding), "k": k}
     )
 
-    if not results["documents"] or not results["documents"][0]:
-        return []
+    return [{"text": r[0], "file_id": r[1]} for r in result.fetchall()]
 
-    return results["documents"][0]
-def delete_chunks(file_id: int):
-    data = collection.get()
 
-    if not data or "ids" not in data:
-        return
-
-    to_delete = [i for i in data["ids"] if i.startswith(f"{file_id}_")]
-
-    if to_delete:
-        collection.delete(ids=to_delete)
-
-def search_all_documents(query: str, user_file_ids: list[int], k=6):
-    user_file_ids = [str(fid) for fid in user_file_ids]
-
-    results = collection.query(
-        query_texts=[query],
-        n_results=k,
-        where={"file_id": {"$in": user_file_ids}}
+# ---------------- DELETE DOC ----------------
+def delete_chunks(db: Session, file_id: int):
+    db.execute(
+        text("DELETE FROM document_chunks WHERE file_id = :file_id"),
+        {"file_id": file_id}
     )
-
-    documents = results["documents"][0]
-    metadatas = results["metadatas"][0]
-
-    combined = []
-    for doc, meta in zip(documents, metadatas):
-        combined.append({
-            "text": doc,
-            "file_id": int(meta["file_id"])
-        })
-
-    return combined
-
+    db.commit()
