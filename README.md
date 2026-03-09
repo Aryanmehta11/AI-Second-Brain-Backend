@@ -154,6 +154,10 @@ web: uvicorn app.main:app --host=0.0.0.0 --port=$PORT
 4. Add tests if applicable
 5. Submit a pull request
 
+## License
+
+[Add your license here]
+
 ## API Documentation
 
 Once running, visit `http://localhost:8000/docs` for interactive Swagger UI documentation.
