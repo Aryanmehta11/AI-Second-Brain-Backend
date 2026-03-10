@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routes import health,ai,upload,auth
+from app.routes import health,ai,upload,auth,eval
 from app.models import user,file
 from app.db.database import Base,engine
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,3 +29,4 @@ app.include_router(ai.router)
 app.include_router(health.router)
 app.include_router(upload.router)
 app.include_router(auth.router)
+app.include_router(eval.router)

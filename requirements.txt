@@ -14,3 +14,7 @@ pydantic[email]
 email-validator
 bcrypt==4.0.1
 langsmith
+jsonref
+ragas==0.4.3
+datasets
+langchain-google-genai
