@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from app.db.database import get_db
 from app.services.ai_service import ask_gemini
-from app.services.vector_service import search_all_documents, search_chunks
+from app.services.vector_service import search_all_documents, search_chunks,hybrid_search_chunks,hybrid_search_all_documents
 from app.core.dependencies import get_current_user
 from app.models.user import User
 from app.models.file import File as FileModel
@@ -33,7 +33,7 @@ def ask_doc(data: Question,db:Session = Depends(get_db),current_user: User = Dep
     if file.user_id != current_user.id:
         raise HTTPException(status_code=403,detail="Access denied")
 
-    chunks = search_chunks(db, data.question, data.file_id)
+    chunks = hybrid_search_chunks(db, data.question, data.file_id)
 
 
     if not chunks:
@@ -93,7 +93,7 @@ def ask_all(data: Question, db: Session = Depends(get_db), current_user: User = 
         raise HTTPException(status_code=400, detail="No documents uploaded")
 
     # 2️⃣ Search across all documents
-    results = search_all_documents(db, data.question, file_ids)
+    results = hybrid_search_all_documents(db, data.question, file_ids)
 
 
     if not results:
