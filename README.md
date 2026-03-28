@@ -267,19 +267,6 @@ Response:
 
 ---
 
-## 🔜 What's Next
-
-- [ ] Streaming responses — word by word like ChatGPT
-- [ ] Docker — containerise for one command deployment
-- [ ] Semantic chunking — split at meaning boundaries not character count
-- [ ] Async evaluation — RAGAs runs in background, zero latency impact
-- [ ] Support Word + PPT files — beyond PDF only
-
----
-
-## 📄 License
-
-MIT — use it, build on it, ship it.
 
 ---
 
