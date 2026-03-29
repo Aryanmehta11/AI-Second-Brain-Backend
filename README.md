@@ -173,6 +173,34 @@ GET  /ai/history/{file_id} → get conversation history
 POST /ai/evaluate          → run RAGAs evaluation scores
 ```
 
+### Health & Monitoring
+
+```
+GET  /health               → service health status
+HEAD /health               → health check (no body)
+GET  /db-health            → database connection check
+HEAD /db-health            → db health check (no body)
+```
+
+---
+
+## ⚠️ Error Responses
+
+Common HTTP status codes:
+
+| Code | Scenario |
+|---|---|
+| 400 | Invalid request (e.g., non-PDF file uploaded) |
+| 401 | Authentication failed (missing/invalid JWT token) |
+| 403 | Access denied (user doesn't own the file) |
+| 404 | Resource not found (file_id, document chunks, etc.) |
+| 500 | Server error (PDF processing failure, API errors) |
+
+**File Validation:**
+- Only `.pdf` files accepted
+- PDF must contain readable text
+- Max document size limited by available memory
+
 ---
 
 ## 🔬 How Hybrid Search Works
@@ -267,6 +295,54 @@ Response:
 
 ---
 
+## 🐳 Docker & Deployment
+
+### Local Development with Docker
+
+```bash
+# Build and run with docker-compose
+docker-compose up --build
+
+# Service will be available at http://localhost:8000
+```
+
+### Environment Setup
+
+Create `.env` for different environments:
+
+**Development (.env.dev):**
+```bash
+DEBUG=True
+DATABASE_URL=postgresql://user:password@localhost/ai_second_brain_dev
+```
+
+**Production (.env.prod):**
+```bash
+DEBUG=False
+DATABASE_URL=postgresql://user:password@prod-db-host/ai_second_brain
+SECRET_KEY=your-super-secret-key-here
+```
+
+### Deploy to Render
+
+1. Push repo to GitHub
+2. Connect to Render dashboard
+3. Set environment variables in Render
+4. Deploy! Render automatically picks up Dockerfile
+
+**For PostgreSQL:**
+- Use Render's managed PostgreSQL service
+- Add `pgvector` extension after database creation:
+```sql
+CREATE EXTENSION vector;
+```
+
+### Deploy Frontend (Netlify)
+
+1. Build frontend assets
+2. Connect repo to Netlify
+3. Set build command and output directory
+4. Configure API endpoint to point to Render backend
 
 ---
 
