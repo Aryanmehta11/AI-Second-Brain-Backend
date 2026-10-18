@@ -1,0 +1,686 @@
+{
+  "dataset": "ai-second-brain-eval-v1",
+  "judge": "gemini-2.5-flash",
+  "summary": {
+    "vector": {
+      "faithfulness": {
+        "mean": 1.0,
+        "n": 25
+      },
+      "answer_correctness": {
+        "mean": 0.831,
+        "n": 24
+      },
+      "context_recall": {
+        "mean": 1.0,
+        "n": 25
+      }
+    },
+    "hybrid": {
+      "faithfulness": {
+        "mean": 0.991,
+        "n": 25
+      },
+      "answer_correctness": {
+        "mean": 0.85,
+        "n": 25
+      },
+      "context_recall": {
+        "mean": 1.0,
+        "n": 25
+      }
+    }
+  },
+  "rows": [
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "How often does Azure SQL Database take transaction log backups and differential backups?",
+      "ground_truth": "Transaction log backups are made every 5-10 minutes and differential backups every 12 hours.",
+      "answer": "Azure SQL Database takes transaction log backups every 5-10 minutes and differential backups every 12 hours.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": null,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "What SLA and latency does Azure Cosmos DB offer?",
+      "ground_truth": "Cosmos DB offers a 99.99% SLA (99.999% for read operations), with latency under 10 ms on reads and under 15 ms on writes.",
+      "answer": "Azure Cosmos DB offers a 99.99% SLA, which increases to 99.999% for read operations. It includes low latencies of less than 10 ms on reads and less than 15 ms on writes.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9105,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "What minimum availability does Azure App Service provide?",
+      "ground_truth": "Azure App Service is highly available by default and stays up at least 99.95% of the time.",
+      "answer": "Azure App Service provides a minimum availability of at least 99.95% of the time.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.7332,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "Which protocol does Azure File storage use, and why is that useful?",
+      "ground_truth": "Azure File storage uses the SMB protocol, which makes it suitable for lifting and shifting a file server into the cloud.",
+      "answer": "Azure File storage uses the SMB protocol. This makes it very suitable for lifting and shifting your file server into the cloud.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9973,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "How long must data be stored to use the cool and archive blob tiers?",
+      "ground_truth": "The cool tier is for infrequently accessed data stored for at least 30 days; the archive tier is for rarely accessed data stored for at least 180 days.",
+      "answer": "To use the cool blob tier, data must be stored for at least 30 days.\nTo use the archive blob tier, data must be stored for at least 180 days.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.7264,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "What are Durable Functions?",
+      "ground_truth": "Durable Functions provide a stateful experience on top of a series of Azure Functions, enabling complex patterns such as scatter/gather and function chaining.",
+      "answer": "Durable Functions provide a stateful experience on top of a series of Azure Functions. They enable complex patterns such as scatter/gather and function chaining. A Durable Function orchestration can range from coupling two functions together to coordinating tens of thousands of function calls over weeks. They are described as a fantastic orchestration tool for developers who are comfortable with writing every step of the process inside a series of Functions.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.7353,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "When should you use Azure SQL Data Warehouse versus Azure Data Lake Store?",
+      "ground_truth": "Use SQL Data Warehouse when you know the questions you want to answer and define a schema; use Data Lake Store when you don't know the questions yet, storing data in its native format without a schema.",
+      "answer": "You should use Azure SQL Data Warehouse when:\n* You know the questions you want to answer with data analytics.\n* You need to define a data schema that determines what your data will look like and how it can be used.\n\nYou should use Azure Data Lake Store when:\n* You don't know the questions you want to answer yet.\n* You do not want to define a data schema.\n* You want to store data in its native format.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.86,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "What problem does Managed Service Identity solve?",
+      "ground_truth": "Managed Service Identity removes the need for the application to keep credentials in its configuration by injecting credentials at runtime that it can use to access services like Azure Key Vault.",
+      "answer": "Managed Service Identity (MSI) solves the problem of applications needing to store credentials in their configuration to connect to services like Azure Active Directory or Azure Key Vault.\n\nWith MSI:\n*   Applications no longer need to have credentials in their configuration.\n*   It injects credentials into your application at runtime, allowing the application to access other services like Azure Key Vault without explicitly storing those credentials.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.8338,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "Which edition of Visual Studio is required to use the Snapshot Debugger?",
+      "ground_truth": "Visual Studio Enterprise is required to use the Snapshot Debugger.",
+      "answer": "You need Visual Studio Enterprise to use the Snapshot Debugger.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9985,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "What do you get with an Azure free account?",
+      "ground_truth": "A $200 credit for 30 days, free access to popular products for 12 months, and more than 25 always-free products.",
+      "answer": "With an Azure free account, you receive:\n\n*   A $200 credit to use on any Azure product for 30 days\n*   Free access to our most popular products for 12 months, including compute, storage, networking, and database\n*   More than 25 products that are always free, including Text Translator, Functions and Active Directory B2C",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.6476,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "Which APIs can you use to store and retrieve data in Cosmos DB?",
+      "ground_truth": "Cosmos DB offers SQL, Gremlin, MongoDB, Azure Table Storage, and Apache Cassandra APIs.",
+      "answer": "You can use the following APIs to store and retrieve data in Cosmos DB:\n*   SQL\n*   Gremlin\n*   MongoDB\n*   Azure Table Storage\n*   Apache Cassandra",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9907,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "How does Azure Active Directory react if a user signs in from Europe and then from Australia one minute later?",
+      "ground_truth": "Azure Active Directory flags it as malicious behavior and asks the user for additional credentials through multifactor authentication.",
+      "answer": "If a user signs in to an application from a location in Europe and then one minute later signs in from Australia, Azure Active Directory would flag this as malicious behavior and ask the user for additional credentials through multifactor authentication.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.6341,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "Which library is used to talk to Azure Active Directory programmatically from .NET?",
+      "ground_truth": "The Active Directory Authentication Library (ADAL) for .NET Framework and .NET Core.",
+      "answer": "To programmatically talk to Azure Active Directory from .NET, you can use the Active Directory Authenticating Library (ADAL) for .NET Framework and .NET Core.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9654,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "What are the limitations of the Azure Storage Emulator compared to Azure Storage in the cloud?",
+      "ground_truth": "It has file size limitations, lacks geo-redundant scaling, and does not support Azure Files.",
+      "answer": "Compared to Azure Storage in the cloud, the Azure Storage Emulator has:\n*   File size limitations.\n*   A lack of geo-redundant scaling.\n*   It does not support Azure Files.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9634,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "azure",
+      "question": "Which scripting languages does Azure Cloud Shell support?",
+      "ground_truth": "Azure Cloud Shell supports Bash and PowerShell.",
+      "answer": "Azure Cloud Shell supports Bash and PowerShell as scripting languages.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9926,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "roadmap",
+      "question": "How long is the fast track roadmap designed to take?",
+      "ground_truth": "It is designed to help software engineers transition into an AI Engineer role in 2 months (8 weeks).",
+      "answer": "The fast track roadmap is designed to take 2 months.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.5434,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "roadmap",
+      "question": "Which company's experience is the roadmap based on, and how many AI projects have they done?",
+      "ground_truth": "Atliq Technologies, which has worked on 25+ AI projects in the last two years, with more than 90% of clients being US-based SMEs.",
+      "answer": "The roadmap is based on the experience of Atliq Technologies. They have worked on 25+ AI projects in the last two years alone.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.59,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "roadmap",
+      "question": "What topics are covered in Week 3?",
+      "ground_truth": "Week 3 covers Agentic AI fundamentals: what an AI agent is, the ReAct reasoning + action loop, building agents in LangChain, routing, AI agent security, and guardrails and evaluation.",
+      "answer": "**Week 3: Agentic AI Fundamentals** covers the following topics:\n*   What is an AI Agent?\n*   ReAct: Reasoning + Action Loop\n*   Building AI Agent in LangChain\n*   Routing in AI Agents\n*   AI Agent Security\n*   Guardrails & Evaluation",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9933,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "roadmap",
+      "question": "Which tool does the roadmap recommend for document parsing and chunking?",
+      "ground_truth": "Docling.",
+      "answer": "The roadmap recommends **Docling** for document parsing and chunking.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9455,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "roadmap",
+      "question": "What cost optimization techniques for AI apps are listed in Week 6?",
+      "ground_truth": "Response caching, rate limiting, and model selection and cascading.",
+      "answer": "In Week 6, the cost optimization techniques for AI apps listed are:\n\n*   Response Caching\n*   Rate limiting\n*   Model Selection & Cascading",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9484,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "roadmap",
+      "question": "Which framework is taught in Week 7 and what is its assignment?",
+      "ground_truth": "Week 7 teaches declarative AI using DSPy, and the assignment is to build a Lovable clone project using DSPy.",
+      "answer": "In Week 7, the framework taught is **DSPy**.\n\nThe assignment for Week 7 is to:\n* Build the lovable clone project using DSPy.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.725,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "roadmap",
+      "question": "Which cloud provider does the roadmap recommend and why?",
+      "ground_truth": "Azure, because their analysis of AI engineer jobs found Azure at the top among cloud providers for AI.",
+      "answer": "The roadmap recommends Azure.\n\nThe document states: \"Cloud skills (especially Azure) are essential especially for experienced AI engineer roles. When we analyzed AI engineer jobs, we found Azure to be at the top among all cloud providers when it comes to AI.\"",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.7174,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "roadmap",
+      "question": "What is the point of the samosa shop analogy?",
+      "ground_truth": "LinkedIn is like a busy city street where your profile gets noticed by many people; creating a profile is only the first step, and you should build online credibility from day 1.",
+      "answer": "The samosa shop analogy is used to explain the importance of LinkedIn and X.\n\nIt illustrates that:\n*   Having skills (like being skilled at making samosas) is not enough if you are not visible.\n*   LinkedIn is like a \"busy street in a big city\" where your profile will be noticed by hundreds of people, just as moving a shop to a busy street helps the business flourish.\n*   Creating a good-looking profile is just the first step, similar to opening a shop, and you need to build strong online credibility (like making tasty samosas and providing good customer service).",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.5738,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "roadmap",
+      "question": "Which LangSmith concepts are covered in Week 4?",
+      "ground_truth": "Traces, runs, threads, and cost tracking.",
+      "answer": "In Week 4, the LangSmith concepts covered are:\n\n*   Traces\n*   Runs\n*   Threads\n*   Cost Tracking",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9647,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "vector",
+      "doc": "roadmap",
+      "question": "Which LLM configuration parameters are listed in Week 1?",
+      "ground_truth": "Context window, temperature, top-p, and top-k.",
+      "answer": "The LLM configuration parameters listed in Week 1 are:\n\n*   Context Window\n*   Temperature\n*   Top-p\n*   Top-k",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9641,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "How often does Azure SQL Database take transaction log backups and differential backups?",
+      "ground_truth": "Transaction log backups are made every 5-10 minutes and differential backups every 12 hours.",
+      "answer": "Without configuring anything, Azure SQL Database takes transaction log backups every 5-10 minutes and differential backups every 12 hours.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9632,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "What SLA and latency does Azure Cosmos DB offer?",
+      "ground_truth": "Cosmos DB offers a 99.99% SLA (99.999% for read operations), with latency under 10 ms on reads and under 15 ms on writes.",
+      "answer": "Azure Cosmos DB offers a 99.99% SLA (99.999% for read operations). It includes low latencies of less than 10 ms on reads and less than 15 ms on writes.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9945,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "What minimum availability does Azure App Service provide?",
+      "ground_truth": "Azure App Service is highly available by default and stays up at least 99.95% of the time.",
+      "answer": "Azure App Service provides a minimum availability of at least 99.95% of the time.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.7332,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "Which protocol does Azure File storage use, and why is that useful?",
+      "ground_truth": "Azure File storage uses the SMB protocol, which makes it suitable for lifting and shifting a file server into the cloud.",
+      "answer": "Azure File storage uses the SMB protocol. This is useful because it makes it very suitable for lifting and shifting your file server into the cloud.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.8469,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "How long must data be stored to use the cool and archive blob tiers?",
+      "ground_truth": "The cool tier is for infrequently accessed data stored for at least 30 days; the archive tier is for rarely accessed data stored for at least 180 days.",
+      "answer": "To use the cool blob tier, data must be stored for at least 30 days.\nTo use the archive blob tier, data must be stored for at least 180 days.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.7264,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "What are Durable Functions?",
+      "ground_truth": "Durable Functions provide a stateful experience on top of a series of Azure Functions, enabling complex patterns such as scatter/gather and function chaining.",
+      "answer": "Durable Functions are used when you want to perform more steps of a larger process. They provide a stateful experience on top of a series of Azure Functions and enable complex patterns such as scatter/gather and function chaining. A Durable Function orchestration can be as simple as coupling two functions together or as complex as coordinating tens of thousands of function calls over weeks. They are a fantastic orchestration tool for developers who are comfortable with writing every step of the process inside a series of Functions.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 0.875,
+        "answer_correctness": 0.7277,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "When should you use Azure SQL Data Warehouse versus Azure Data Lake Store?",
+      "ground_truth": "Use SQL Data Warehouse when you know the questions you want to answer and define a schema; use Data Lake Store when you don't know the questions yet, storing data in its native format without a schema.",
+      "answer": "You should use Azure SQL Data Warehouse when you know the questions you want to answer with data analytics and can define a data schema for your data.\n\nYou should use Azure Data Lake Store when you don't know the questions you want to answer yet. With Data Lake Store, you do not have to define a data schema and can store data in its native format.\n\nBoth are suitable for storing large amounts of data for data analytics purposes and can hold petabytes of data, with Azure Data Lake Store having no limits on the amount of data and file sizes.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.7685,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "What problem does Managed Service Identity solve?",
+      "ground_truth": "Managed Service Identity removes the need for the application to keep credentials in its configuration by injecting credentials at runtime that it can use to access services like Azure Key Vault.",
+      "answer": "Managed Service Identity (MSI) solves the problem of applications needing to store credentials in their configuration to connect to services like Azure Active Directory or Azure Key Vault.\n\nIt eliminates the need for these credentials by injecting them into your application at runtime, allowing it to access other services (like Azure Key Vault) without explicitly having credentials in its configuration.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 0.9,
+        "answer_correctness": 0.9447,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "Which edition of Visual Studio is required to use the Snapshot Debugger?",
+      "ground_truth": "Visual Studio Enterprise is required to use the Snapshot Debugger.",
+      "answer": "You need Visual Studio Enterprise to use the Snapshot Debugger.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9985,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "What do you get with an Azure free account?",
+      "ground_truth": "A $200 credit for 30 days, free access to popular products for 12 months, and more than 25 always-free products.",
+      "answer": "With an Azure free account, you receive:\n*   A $200 credit to use on any Azure product for 30 days.\n*   Free access to popular products for 12 months, including compute, storage, networking, and database.\n*   More than 25 products that are always free, such as Text Translator, Functions, and Active Directory B2C.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.5726,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "Which APIs can you use to store and retrieve data in Cosmos DB?",
+      "ground_truth": "Cosmos DB offers SQL, Gremlin, MongoDB, Azure Table Storage, and Apache Cassandra APIs.",
+      "answer": "You can use the following APIs to store and retrieve data in Cosmos DB:\n*   SQL\n*   Gremlin\n*   MongoDB\n*   Azure Table Storage\n*   Apache Cassandra",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9907,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "How does Azure Active Directory react if a user signs in from Europe and then from Australia one minute later?",
+      "ground_truth": "Azure Active Directory flags it as malicious behavior and asks the user for additional credentials through multifactor authentication.",
+      "answer": "If a user signs in to an application from a location in Europe and then one minute later signs in from Australia, Azure Active Directory would flag this as malicious behavior and ask the user for additional credentials through multifactor authentication.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9556,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "Which library is used to talk to Azure Active Directory programmatically from .NET?",
+      "ground_truth": "The Active Directory Authentication Library (ADAL) for .NET Framework and .NET Core.",
+      "answer": "To programmatically talk to Azure Active Directory from .NET, you can use the Active Directory Authenticating Library (ADAL) for .NET Framework and .NET Core.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9654,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "What are the limitations of the Azure Storage Emulator compared to Azure Storage in the cloud?",
+      "ground_truth": "It has file size limitations, lacks geo-redundant scaling, and does not support Azure Files.",
+      "answer": "The Azure Storage Emulator has the following limitations compared to Azure Storage in the cloud:\n\n*   **File size limitations**\n*   **Lack of geo-redundant scaling**\n*   **Does not support Azure Files**",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9661,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "azure",
+      "question": "Which scripting languages does Azure Cloud Shell support?",
+      "ground_truth": "Azure Cloud Shell supports Bash and PowerShell.",
+      "answer": "Azure Cloud Shell supports Bash and PowerShell as scripting languages.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9926,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "roadmap",
+      "question": "How long is the fast track roadmap designed to take?",
+      "ground_truth": "It is designed to help software engineers transition into an AI Engineer role in 2 months (8 weeks).",
+      "answer": "The fast track roadmap is designed to take 2 months.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.5434,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "roadmap",
+      "question": "Which company's experience is the roadmap based on, and how many AI projects have they done?",
+      "ground_truth": "Atliq Technologies, which has worked on 25+ AI projects in the last two years, with more than 90% of clients being US-based SMEs.",
+      "answer": "The roadmap is based on the experience of **Atliq Technologies**, where they have worked on **25+ AI projects** in the last two years alone.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.5904,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "roadmap",
+      "question": "What topics are covered in Week 3?",
+      "ground_truth": "Week 3 covers Agentic AI fundamentals: what an AI agent is, the ReAct reasoning + action loop, building agents in LangChain, routing, AI agent security, and guardrails and evaluation.",
+      "answer": "In Week 3, the following topics are covered:\n*   What is an AI Agent?\n*   ReAct: Reasoning + Action Loop\n*   Building AI Agent in LangChain\n*   Routing in AI Agents\n*   AI Agent Security\n*   Guardrails & Evaluation",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9312,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "roadmap",
+      "question": "Which tool does the roadmap recommend for document parsing and chunking?",
+      "ground_truth": "Docling.",
+      "answer": "The roadmap recommends **Docling** for document parsing and chunking.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9455,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "roadmap",
+      "question": "What cost optimization techniques for AI apps are listed in Week 6?",
+      "ground_truth": "Response caching, rate limiting, and model selection and cascading.",
+      "answer": "In Week 6, the cost optimization techniques listed for AI apps are:\n*   Response Caching\n*   Rate limiting\n*   Model Selection & Cascading",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9496,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "roadmap",
+      "question": "Which framework is taught in Week 7 and what is its assignment?",
+      "ground_truth": "Week 7 teaches declarative AI using DSPy, and the assignment is to build a Lovable clone project using DSPy.",
+      "answer": "The framework taught in Week 7 is DSPy. The assignment is to build the lovable clone project using DSPy.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.7241,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "roadmap",
+      "question": "Which cloud provider does the roadmap recommend and why?",
+      "ground_truth": "Azure, because their analysis of AI engineer jobs found Azure at the top among cloud providers for AI.",
+      "answer": "The roadmap recommends **Azure**.\n\nThe reason provided is that \"When we analyzed AI engineer jobs, we found Azure to be at the top among all cloud providers when it comes to AI.\" It also states that \"Cloud skills (especially Azure) are essential especially for experienced AI engineer roles.\"",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.6461,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "roadmap",
+      "question": "What is the point of the samosa shop analogy?",
+      "ground_truth": "LinkedIn is like a busy city street where your profile gets noticed by many people; creating a profile is only the first step, and you should build online credibility from day 1.",
+      "answer": "The samosa shop analogy is used to explain the importance of LinkedIn and X (Twitter) profiles.\n\nIt illustrates that just as a skilled samosa maker needs to open their shop on a busy street to be noticed and succeed, individuals with technical skills need to have a strong presence on platforms like LinkedIn to be seen by many people and build online credibility.",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.8466,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "roadmap",
+      "question": "Which LangSmith concepts are covered in Week 4?",
+      "ground_truth": "Traces, runs, threads, and cost tracking.",
+      "answer": "In Week 4, the following LangSmith concepts are covered:\n*   Traces\n*   Runs\n*   Threads\n*   Cost Tracking",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.962,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "mode": "hybrid",
+      "doc": "roadmap",
+      "question": "Which LLM configuration parameters are listed in Week 1?",
+      "ground_truth": "Context window, temperature, top-p, and top-k.",
+      "answer": "The LLM configuration parameters listed in Week 1 are:\n*   Context Window\n*   Temperature\n*   Top-p\n*   Top-k",
+      "chunks": 4,
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_correctness": 0.9655,
+        "context_recall": 1.0
+      }
+    }
+  ]
+}

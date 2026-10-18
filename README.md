@@ -16,19 +16,30 @@ A deployed, measured, production-grade RAG system.
 
 RAGAs on a 25-question eval set ([`eval/dataset.json`](eval/dataset.json)) over two public PDFs, judged by Gemini 2.5 Flash. Run date: 2026-10-18.
 
+**Current: heading-aware chunking** (line-boundary chunks, 150-char overlap, section-heading prefix)
+
+| Retrieval | Faithfulness | Answer Correctness | Context Recall |
+|---|---|---|---|
+| Vector only | 1.00 | 0.83 | 1.00 |
+| **Hybrid (vector + keyword + RRF)** — used in production | **0.99** | **0.85** | **1.00** |
+
+**Before: fixed 800-character chunks**
+
 | Retrieval | Faithfulness | Answer Correctness | Context Recall |
 |---|---|---|---|
 | Vector only | 0.99 | 0.78 | 0.93 |
-| **Hybrid (vector + keyword + RRF)** — used in production | **0.97** | **0.80** | **0.93** |
+| Hybrid | 0.97 | 0.80 | 0.93 |
 
-Per-question answers and scores: [`eval/results/2026-10-18.json`](eval/results/2026-10-18.json).
+Per-question answers and scores: [`heading-aware-chunks`](eval/results/2026-10-18-heading-aware-chunks.json) · [`fixed-size-chunks`](eval/results/2026-10-18-fixed-size-chunks.json). One vector answer-correctness score in the new run failed to compute (n=24).
 
 **What the numbers say**
 
 - Answers stay grounded in the retrieved context (faithfulness ~0.97–0.99).
 - Hybrid and vector are close on this set. Hybrid helped most on questions with exact names (ADAL, Managed Service Identity, Atliq) and was roughly even on purely semantic questions.
 - Answer correctness is a strict metric: it penalises missing or extra detail against the reference, so correct-but-shorter answers score ~0.55–0.75.
-- **Known weakness — fixed-size chunking.** 800-character chunks with no overlap can cut a section away from its heading. Example: "Which LLM parameters are listed in Week 1?" fails because the parameter list and the "Week 1" heading land in different chunks (context recall 0.0). Next step: heading-aware chunking with overlap, then re-run this eval.
+- **The eval found a chunking bug, and fixing it moved the numbers.** Fixed 800-character chunks cut sections away from their headings: "Which LLM parameters are listed in Week 1?" scored 0.16 answer correctness with 0.0 context recall because the list and the "Week 1" heading landed in different chunks. Heading-aware chunking ([`chunk_service.py`](app/services/chunk_service.py)) fixed it (0.16 → 0.97), and "What topics are covered in Week 3?" went from 0.54 to 0.93.
+- Single run with an LLM judge: individual questions vary by about ±0.2 between runs, so compare averages rather than single questions.
+- Documents uploaded before this change keep their old chunks until they are re-uploaded.
 
 **Operational metrics** (from LangSmith traces, Mar–Apr 2026, ~1,500 tokens/query): P50 latency 2.94s, P99 32.13s, cost <$0.001/query. These traces have since expired under LangSmith's retention window.
 
@@ -70,7 +81,7 @@ Per-question answers and scores: [`eval/results/2026-10-18.json`](eval/results/2
 
 ```
 Upload:
-PDF → Text Extraction → Chunking (800 chars)
+PDF → Text Extraction → Heading-aware chunking (~800 chars, 150 overlap)
 → Gemini Embeddings → pgvector Storage
 
 Query (Hybrid Search):

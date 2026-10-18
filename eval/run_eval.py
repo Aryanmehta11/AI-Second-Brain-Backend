@@ -149,6 +149,7 @@ def push_dataset_to_langsmith(spec: dict):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--docs", required=True, help="folder containing the PDFs listed in dataset.json")
+    ap.add_argument("--tag", default="", help="suffix for the results file, e.g. a chunking strategy name")
     args = ap.parse_args()
 
     spec = json.loads((EVAL_DIR / "dataset.json").read_text(encoding="utf8"))
@@ -183,7 +184,7 @@ def main():
             vals = [r["scores"].get(m) for r in rows if r["mode"] == mode and r["scores"].get(m) is not None]
             summary[mode][m] = {"mean": round(statistics.mean(vals), 3) if vals else None, "n": len(vals)}
 
-    out = EVAL_DIR / "results" / f"{date.today()}.json"
+    out = EVAL_DIR / "results" / f"{date.today()}{'-' + args.tag if args.tag else ''}.json"
     out.parent.mkdir(exist_ok=True)
     out.write_text(json.dumps({"dataset": spec["name"], "judge": "gemini-2.5-flash",
                                "summary": summary, "rows": rows}, indent=2), encoding="utf8")
