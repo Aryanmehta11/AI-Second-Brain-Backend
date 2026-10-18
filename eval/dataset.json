@@ -1,0 +1,41 @@
+{
+  "name": "ai-second-brain-eval-v1",
+  "description": "25 single-document QA pairs over two public PDFs. Ground truths are taken directly from the source text.",
+  "documents": {
+    "azure": {
+      "title": "Azure Quick Start Guide for .NET Developers (Microsoft, free e-book)",
+      "pdf": "Azure-Quick-Start-for-NET-Developers.pdf"
+    },
+    "roadmap": {
+      "title": "AI Engineering: Fast Track Roadmap for SWEs 2026 (Codebasics, free PDF)",
+      "pdf": "AI_Engineering_SWE_Roadmap_2026.pdf"
+    }
+  },
+  "questions": [
+    {"doc": "azure", "question": "How often does Azure SQL Database take transaction log backups and differential backups?", "ground_truth": "Transaction log backups are made every 5-10 minutes and differential backups every 12 hours."},
+    {"doc": "azure", "question": "What SLA and latency does Azure Cosmos DB offer?", "ground_truth": "Cosmos DB offers a 99.99% SLA (99.999% for read operations), with latency under 10 ms on reads and under 15 ms on writes."},
+    {"doc": "azure", "question": "What minimum availability does Azure App Service provide?", "ground_truth": "Azure App Service is highly available by default and stays up at least 99.95% of the time."},
+    {"doc": "azure", "question": "Which protocol does Azure File storage use, and why is that useful?", "ground_truth": "Azure File storage uses the SMB protocol, which makes it suitable for lifting and shifting a file server into the cloud."},
+    {"doc": "azure", "question": "How long must data be stored to use the cool and archive blob tiers?", "ground_truth": "The cool tier is for infrequently accessed data stored for at least 30 days; the archive tier is for rarely accessed data stored for at least 180 days."},
+    {"doc": "azure", "question": "What are Durable Functions?", "ground_truth": "Durable Functions provide a stateful experience on top of a series of Azure Functions, enabling complex patterns such as scatter/gather and function chaining."},
+    {"doc": "azure", "question": "When should you use Azure SQL Data Warehouse versus Azure Data Lake Store?", "ground_truth": "Use SQL Data Warehouse when you know the questions you want to answer and define a schema; use Data Lake Store when you don't know the questions yet, storing data in its native format without a schema."},
+    {"doc": "azure", "question": "What problem does Managed Service Identity solve?", "ground_truth": "Managed Service Identity removes the need for the application to keep credentials in its configuration by injecting credentials at runtime that it can use to access services like Azure Key Vault."},
+    {"doc": "azure", "question": "Which edition of Visual Studio is required to use the Snapshot Debugger?", "ground_truth": "Visual Studio Enterprise is required to use the Snapshot Debugger."},
+    {"doc": "azure", "question": "What do you get with an Azure free account?", "ground_truth": "A $200 credit for 30 days, free access to popular products for 12 months, and more than 25 always-free products."},
+    {"doc": "azure", "question": "Which APIs can you use to store and retrieve data in Cosmos DB?", "ground_truth": "Cosmos DB offers SQL, Gremlin, MongoDB, Azure Table Storage, and Apache Cassandra APIs."},
+    {"doc": "azure", "question": "How does Azure Active Directory react if a user signs in from Europe and then from Australia one minute later?", "ground_truth": "Azure Active Directory flags it as malicious behavior and asks the user for additional credentials through multifactor authentication."},
+    {"doc": "azure", "question": "Which library is used to talk to Azure Active Directory programmatically from .NET?", "ground_truth": "The Active Directory Authentication Library (ADAL) for .NET Framework and .NET Core."},
+    {"doc": "azure", "question": "What are the limitations of the Azure Storage Emulator compared to Azure Storage in the cloud?", "ground_truth": "It has file size limitations, lacks geo-redundant scaling, and does not support Azure Files."},
+    {"doc": "azure", "question": "Which scripting languages does Azure Cloud Shell support?", "ground_truth": "Azure Cloud Shell supports Bash and PowerShell."},
+    {"doc": "roadmap", "question": "How long is the fast track roadmap designed to take?", "ground_truth": "It is designed to help software engineers transition into an AI Engineer role in 2 months (8 weeks)."},
+    {"doc": "roadmap", "question": "Which company's experience is the roadmap based on, and how many AI projects have they done?", "ground_truth": "Atliq Technologies, which has worked on 25+ AI projects in the last two years, with more than 90% of clients being US-based SMEs."},
+    {"doc": "roadmap", "question": "What topics are covered in Week 3?", "ground_truth": "Week 3 covers Agentic AI fundamentals: what an AI agent is, the ReAct reasoning + action loop, building agents in LangChain, routing, AI agent security, and guardrails and evaluation."},
+    {"doc": "roadmap", "question": "Which tool does the roadmap recommend for document parsing and chunking?", "ground_truth": "Docling."},
+    {"doc": "roadmap", "question": "What cost optimization techniques for AI apps are listed in Week 6?", "ground_truth": "Response caching, rate limiting, and model selection and cascading."},
+    {"doc": "roadmap", "question": "Which framework is taught in Week 7 and what is its assignment?", "ground_truth": "Week 7 teaches declarative AI using DSPy, and the assignment is to build a Lovable clone project using DSPy."},
+    {"doc": "roadmap", "question": "Which cloud provider does the roadmap recommend and why?", "ground_truth": "Azure, because their analysis of AI engineer jobs found Azure at the top among cloud providers for AI."},
+    {"doc": "roadmap", "question": "What is the point of the samosa shop analogy?", "ground_truth": "LinkedIn is like a busy city street where your profile gets noticed by many people; creating a profile is only the first step, and you should build online credibility from day 1."},
+    {"doc": "roadmap", "question": "Which LangSmith concepts are covered in Week 4?", "ground_truth": "Traces, runs, threads, and cost tracking."},
+    {"doc": "roadmap", "question": "Which LLM configuration parameters are listed in Week 1?", "ground_truth": "Context window, temperature, top-p, and top-k."}
+  ]
+}

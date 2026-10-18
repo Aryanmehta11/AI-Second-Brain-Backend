@@ -12,27 +12,32 @@ A deployed, measured, production-grade RAG system.
 
 ---
 
-## 📊 Production Metrics
+## 📊 Evaluation Results
 
-| Metric | Score |
-|---|---|
-| Faithfulness | 1.0 — zero hallucination |
-| Answer Correctness | 0.97 — 97% accurate |
-| Error Rate | 0% across production runs |
-| P50 Latency | 2.94s |
-| P99 Latency | 32.13s |
-| Avg tokens/query | ~1,500 |
-| Cost per query | <$0.001 |
+RAGAs on a 25-question eval set ([`eval/dataset.json`](eval/dataset.json)) over two public PDFs, judged by Gemini 2.5 Flash. Run date: 2026-10-18.
 
-Evaluated using RAGAs on real uploaded documents.
-Monitored via LangSmith observability.
+| Retrieval | Faithfulness | Answer Correctness | Context Recall |
+|---|---|---|---|
+| Vector only | 0.99 | 0.78 | 0.93 |
+| **Hybrid (vector + keyword + RRF)** — used in production | **0.97** | **0.80** | **0.93** |
+
+Per-question answers and scores: [`eval/results/2026-10-18.json`](eval/results/2026-10-18.json).
+
+**What the numbers say**
+
+- Answers stay grounded in the retrieved context (faithfulness ~0.97–0.99).
+- Hybrid and vector are close on this set. Hybrid helped most on questions with exact names (ADAL, Managed Service Identity, Atliq) and was roughly even on purely semantic questions.
+- Answer correctness is a strict metric: it penalises missing or extra detail against the reference, so correct-but-shorter answers score ~0.55–0.75.
+- **Known weakness — fixed-size chunking.** 800-character chunks with no overlap can cut a section away from its heading. Example: "Which LLM parameters are listed in Week 1?" fails because the parameter list and the "Week 1" heading land in different chunks (context recall 0.0). Next step: heading-aware chunking with overlap, then re-run this eval.
+
+**Operational metrics** (from LangSmith traces, Mar–Apr 2026, ~1,500 tokens/query): P50 latency 2.94s, P99 32.13s, cost <$0.001/query. These traces have since expired under LangSmith's retention window.
 
 ---
 
 ## ✨ Features
 
 - **Hybrid Search** — vector + keyword search combined with Reciprocal Rank Fusion (RRF) for better retrieval accuracy
-- **RAGAs Evaluation** — faithfulness + answer correctness scored on real documents
+- **RAGAs Evaluation** — 25-question eval set comparing vector vs hybrid retrieval on faithfulness, answer correctness, and context recall
 - **LangSmith Observability** — every Gemini call traced with latency, tokens, and cost
 - **Token Tracking** — input/output tokens logged per query
 - **Multi-Document Search** — query across all uploaded documents simultaneously
@@ -235,9 +240,9 @@ Every Gemini call is traced in LangSmith:
 ✅ Token count — input + output
 ✅ Latency per call
 ✅ Cost per query
-✅ 0% error rate in production
-✅ 17+ production runs traced
 ```
+
+Eval runs are traced to the `AI-Second-Brain-Evaluation` project, and the eval set is stored as the LangSmith dataset `ai-second-brain-eval-v1`.
 
 ---
 
@@ -256,13 +261,27 @@ At scale:
 
 ## 🔬 RAGAs Evaluation
 
-Run evaluation locally:
+### Full eval set (vector vs hybrid)
+
+The eval runs against a throwaway local pgvector database, never the production `DATABASE_URL`.
+
+1. Start a local pgvector container:
 
 ```bash
-python test_ragas.py
+docker run -d --name ai_brain_eval_db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ai_second_brain -p 5433:5432 pgvector/pgvector:pg16
 ```
 
-Or via API endpoint:
+2. Download the two source PDFs listed in [`eval/dataset.json`](eval/dataset.json) into one folder (they are not committed for copyright reasons).
+
+3. Run:
+
+```bash
+python -m eval.run_eval --docs path/to/pdf/folder
+```
+
+This ingests the PDFs with the app's own chunking and embedding code, answers each question with the same prompt as `/ai/ask-doc`, scores both retrieval modes with RAGAs, and writes `eval/results/<date>.json`.
+
+### Single question via API
 
 ```bash
 POST /ai/evaluate
